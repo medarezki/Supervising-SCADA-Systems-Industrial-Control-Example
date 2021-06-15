@@ -1,0 +1,64 @@
+(*
+ *
+ * File: generated_program.exp
+ *
+ * IEC 61131-3 Structured Text (ST) code generated for subsystem "untitled/Subsystem"
+ *
+ * Model name                      : untitled
+ * Model version                   : 1.0
+ * Model creator                   : Mohamed Rekkal
+ * Model last modified by          : The MathWorks, Inc.
+ * Model last modified on          : Tue Feb 06 21:10:17 2018
+ * Model sample time               : 0s
+ * Subsystem name                  : untitled/Subsystem
+ * Subsystem sample time           : 0.2s
+ * Simulink PLC Coder version      : 2.5 (R2018a) 06-Feb-2018
+ * ST code generated on            : Fri Mar 12 11:15:07 2021
+ *
+ * Target IDE selection            : 3S CoDeSys 2.3
+ * Test Bench included             : No
+ *
+ *)
+FUNCTION_BLOCK Subsystem
+VAR_INPUT
+    ssMethodType: SINT;
+    In1: LREAL;
+END_VAR
+VAR_OUTPUT
+    Out1: LREAL;
+END_VAR
+VAR
+    Filter_DSTATE: LREAL;
+    Integrator_DSTATE: LREAL;
+END_VAR
+VAR_TEMP
+    rtb_FilterCoefficient: LREAL;
+END_VAR
+CASE ssMethodType OF
+    SS_INITIALIZE:
+        (* InitializeConditions for DiscreteIntegrator: '<S2>/Filter' *)
+        Filter_DSTATE := 0.0;
+        (* InitializeConditions for DiscreteIntegrator: '<S2>/Integrator' *)
+        Integrator_DSTATE := 0.0;
+    SS_STEP:
+        (* Gain: '<S2>/Filter Coefficient' incorporates:
+         *  DiscreteIntegrator: '<S2>/Filter'
+         *  Gain: '<S2>/Derivative Gain'
+         *  Sum: '<S2>/SumD' *)
+        rtb_FilterCoefficient := (0.0 - Filter_DSTATE) * 100.0;
+        (* Outport: '<Root>/Out1' incorporates:
+         *  DiscreteIntegrator: '<S2>/Integrator'
+         *  Sum: '<S2>/Sum' *)
+        Out1 := (In1 + Integrator_DSTATE) + rtb_FilterCoefficient;
+        (* Update for DiscreteIntegrator: '<S2>/Filter' *)
+        Filter_DSTATE := (0.2 * rtb_FilterCoefficient) + Filter_DSTATE;
+        (* Update for DiscreteIntegrator: '<S2>/Integrator' *)
+        Integrator_DSTATE := (0.2 * In1) + Integrator_DSTATE;
+END_CASE;
+END_FUNCTION_BLOCK
+VAR_GLOBAL CONSTANT
+    SS_INITIALIZE: SINT := 0;
+    SS_STEP: SINT := 1;
+END_VAR
+
+
